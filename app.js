@@ -1,10 +1,10 @@
 let layout = 
 [
-    0, "X", 0, 0, 0,
+    0, 0, 0, 2, 0,
     0, 0, 0, 0, 0,
-    0, 0, "X", 0, 0,
+    0, 0, 0, "X", 0,
     0, 0, 0, 0, 0,
-    0, 0, 2, 0, 0
+    0, 0, 0, 0, 0
 ]
 
 class GPS {
@@ -22,6 +22,7 @@ class GPS {
         this.down = this.layout[this.currentPosition + this.rowSize]
         this.up = this.layout[this.currentPosition - this.rowSize]
         this.previous
+        this.n = 0
     }
 
     show() {
@@ -61,12 +62,14 @@ class GPS {
     }
 
     fastest() {
-        console.log(this.columnDifference)
         // HORIZONTAL MOVES
         this.horizontalMove()
 
         // VERTICAL MOVES
         this.verticalMove()
+
+        // RETURN END POSITION
+        return `The end position is : ${this.currentPosition}`
     }
 
     search() {
@@ -89,10 +92,28 @@ class GPS {
             while(this.columnDifference !== 0) {
 
                 if(this.layout[this.currentPosition + 1] === "X") {
+
                     console.log("FROM UNDEFINED IF")
+
                     while(this.layout[this.currentPosition + 1] === "X") {
-                    this.rowDifference <= 0 ? this.currentPosition+=this.rowSize : this.currentPosition-=this.rowSize
+
+                        if(this.rowDifference <= 0) {
+
+                            this.currentPosition+=this.rowSize
+                            this.rowDifference++
+
+                        } else if(this.rowDifference >= 0) {
+
+                            this.currentPosition-=this.rowSize
+                            this.rowDifference--  
+
+                        } else if(this.rowDifference === 0) {
+                            alert("ITS ZERO ROWDIFFERENCE")
+                        }
+
                     document.getElementById(`${this.currentPosition}`).style.color = "red"
+                    console.log("Current pos : " + this.currentPosition)
+
                     }
                 }
                 
@@ -102,64 +123,140 @@ class GPS {
                 console.log("right")
                 console.log("Current pos : " + this.currentPosition)
                 document.getElementById(`${this.currentPosition}`).style.color = "red"
+
             }
+
         } else if(this.columnDifference >= 0) {
+
             while(this.columnDifference !== 0) {
+
+                if(this.layout[this.currentPosition - 1] === "X") {
+
+                    console.log("FROM HORIZONTAL UNDEFINED IF")
+
+                    while(this.layout[this.currentPosition - 1] === "X") {
+
+                        if(this.rowDifference <= 0) {
+    
+                                this.currentPosition+=this.rowSize
+                                this.rowDifference++
+    
+                            } else if(this.rowDifference >= 0) {
+    
+                                this.currentPosition-=this.rowSize
+                                this.rowDifference--  
+    
+                            }
+                        
+                    document.getElementById(`${this.currentPosition}`).style.color = "red"
+                    console.log("Current pos : " + this.currentPosition)
+
+                    }
+                }
+
                 this.columnDifference--
                 this.currentPosition--
                 console.log("left")
                 console.log("Current pos : " + this.currentPosition)
                 document.getElementById(`${this.currentPosition}`).style.color = "red"
+                this.verticalMove()
             }
         }
     }
 
     verticalMove() {
+
+        console.log("hello")
         if(this.rowDifference <= 0) {
+
             while(this.rowDifference !== 0) {
 
-                    console.log("UNDEFINED SECOND")
-                    while(this.layout[this.currentPosition += this.rowSize] === "X") {
+                if(this.layout[this.currentPosition + this.rowSize] === "X") {
+
+                    console.log("FROM VERTICAL UNDEFINED IF")
+
+                    while(this.layout[this.currentPosition + this.rowSize] === "X") {
+
+                        
+
                         if(this.columnDifference <= 0) {
-                            console.log("1")
-                            console.log("Current pos : " + this.currentPosition)
-                            this.currentPosition +=1
-                            console.log("Current pos : " + this.currentPosition)
-                            document.getElementById(`${this.currentPosition}`).style.color = "red"
+
+                            this.currentPosition++
+                            this.columnDifference++
+
                         } else if(this.columnDifference >= 0) {
-                            console.log("2")
-                            this.currentPosition -= 1
-                            document.getElementById(`${this.currentPosition}`).style.color = "red"
-                        } else if(this.columnDifference === 0) {
-                            console.log("3")
-                            this.currentPosition += 1
-                            document.getElementById(`${this.currentPosition}`).style.color = "red"
+
+                            this.currentPosition--
+                            this.columnDifference--
+
                         }
-    
-                    
+
+                        this.n++
+
+                        document.getElementById(`${this.currentPosition}`).style.color = "red"
+                        console.log("Current pos : " + this.currentPosition)
+
+                    }
                 }
 
-
+                console.log("VERTICAL FIRST WHILE")
                 this.rowDifference++
                 this.currentPosition+=this.rowSize
                 this.setNewPosition()
-                console.log("down")
                 console.log("Current pos : " + this.currentPosition)
                 document.getElementById(`${this.currentPosition}`).style.color = "red"
+
             }
+
         }
+
         if(this.rowDifference >= 0) {
+
             while(this.rowDifference !== 0) {
+
+                if(this.layout[this.currentPosition - this.rowSize] === "X") {
+
+                    console.log("FROM VERTICAL UNDEFINED IF 2")
+
+                    while(this.layout[this.currentPosition - this.rowSize] === "X") {
+
+                        if(this.columnDifference < 0) {
+
+                            this.currentPosition++
+                            this.columnDifference++
+
+                        } else if(this.columnDifference > 0) {
+
+                            this.currentPosition--
+                            this.columnDifference--
+
+                        } else if(this.columnDifference === 0) {                            
+
+                            this.currentPosition--
+                            this.columnDifference--
+                            
+                        }
+
+                        document.getElementById(`${this.currentPosition}`).style.color = "red"
+                        console.log("Current pos : " + this.currentPosition)
+
+                    }
+                }
+
                 this.rowDifference--
                 this.currentPosition-=this.rowSize
                 this.setNewPosition()
                 console.log("up")
                 console.log("Current pos : " + this.currentPosition)
                 document.getElementById(`${this.currentPosition}`).style.color = "red"
+                this.horizontalMove()
+
             }
+
         }
+
     }
 }
 
-const gps = new GPS(5, layout, 0)
+const gps = new GPS(5, layout, 23)
 gps.show()
